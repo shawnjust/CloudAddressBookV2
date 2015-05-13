@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/appBar"
+        layout="@layout/app_bar" />
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/emailEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="邮箱"
+        android:inputType="textEmailAddress"
+        app:met_iconLeft="@drawable/ic_email_black_24dp"
+        app:met_floatingLabel="highlight"
+        app:met_iconPadding="0dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"/>
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/nameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="用户名"
+        android:inputType="text"
+        app:met_iconLeft="@drawable/ic_account_circle_black_24dp"
+        app:met_floatingLabel="highlight"
+        app:met_iconPadding="0dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"/>
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/passwordEditView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="密码"
+        android:inputType="textPassword"
+        app:met_iconLeft="@drawable/ic_lock_black_24dp"
+        app:met_floatingLabel="highlight"
+        app:met_iconPadding="0dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"/>
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/passwordRepeatEditView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="重复密码"
+        android:inputType="textPassword"
+        app:met_iconLeft="@drawable/ic_lock_black_24dp"
+        app:met_floatingLabel="highlight"
+        app:met_iconPadding="0dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"/>
+
+    <com.gc.materialdesign.views.ButtonRectangle
+        android:id="@+id/registButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primaryColor"
+        android:text="@string/regist_button"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"/>
+
+
+</LinearLayout>
