@@ -67,8 +67,15 @@
         </activity>
         <activity
             android:name=".UserDetailInfoActivity"
-            android:label="@string/title_activity_user_detail_info" >
+            android:label="@string/title_activity_user_detail_info" />
+        <activity
+            android:name=".MessagesActivity"
+            android:label="@string/title_activity_messages" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
         </activity>
+
     </application>
 
 </manifest>

@@ -55,7 +55,7 @@ public class AddFriendActivity extends ActionBarActivity {
                 User user = viewHolder.getUser();
                 Intent intent = new Intent(AddFriendActivity.this, UserDetailInfoActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putParcelable("USER", user);
+                bundle.putSerializable("USER", user);
                 intent.putExtra("BUNDLE",bundle);
                 startActivity(intent);
             }

@@ -13,11 +13,11 @@ import android.widget.TextView;
 import com.shawn.tongji.cloudaddressbook.R;
 import com.shawn.tongji.cloudaddressbook.bean.ContactsInfoItem;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
-/**
- * Created by shawn on 5/13/15.
- */
+
 public class ContactsInfoAdapter extends RecyclerView.Adapter<ContactsInfoAdapter.ContactsInfoViewHolder> {
 
     private final Context context;
@@ -34,6 +34,18 @@ public class ContactsInfoAdapter extends RecyclerView.Adapter<ContactsInfoAdapte
 
     public void setList(List<ContactsInfoItem> list) {
         this.list = list;
+        Collections.sort(this.list, new Comparator<ContactsInfoItem>() {
+            @Override
+            public int compare(ContactsInfoItem lhs, ContactsInfoItem rhs) {
+                if (lhs.getGravity() > rhs.getGravity()) {
+                    return 1;
+                } else if (lhs.getGravity() == rhs.getGravity()) {
+                    return 0;
+                } else {
+                    return -1;
+                }
+            }
+        });
         this.notifyDataSetChanged();
     }
 

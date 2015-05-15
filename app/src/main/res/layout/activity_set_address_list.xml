@@ -1,6 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -8,8 +8,8 @@
 
 
     <include
-        layout="@layout/app_bar"
-        android:id="@+id/appBar" />
+        android:id="@+id/appBar"
+        layout="@layout/app_bar" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -21,27 +21,31 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="hello" />
-
             <com.rengwuxian.materialedittext.MaterialEditText
                 android:id="@+id/nameEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/form_user_name"
-                app:met_iconLeft="@drawable/ic_account_circle_black_48dp"
                 app:met_floatingLabel="highlight"
+                app:met_iconLeft="@drawable/ic_person_black_24dp"
+                app:met_iconPadding="0dp" />
+
+            <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/mobilePhoneEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="移动电话"
+                app:met_floatingLabel="highlight"
+                app:met_iconLeft="@drawable/ic_phone_black_24dp"
                 app:met_iconPadding="0dp" />
 
             <com.rengwuxian.materialedittext.MaterialEditText
                 android:id="@+id/homePhoneEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="电话"
-                app:met_iconLeft="@drawable/ic_account_circle_black_48dp"
+                android:hint="家庭电话"
                 app:met_floatingLabel="highlight"
+                app:met_iconLeft="@drawable/ic_phone_black_24dp"
                 app:met_iconPadding="0dp" />
 
             <com.rengwuxian.materialedittext.MaterialEditText
@@ -49,32 +53,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="邮箱"
-                app:met_iconLeft="@drawable/ic_account_circle_black_48dp"
                 app:met_floatingLabel="highlight"
+                app:met_iconLeft="@drawable/ic_mail_black_24dp"
                 app:met_iconPadding="0dp" />
 
             <com.rengwuxian.materialedittext.MaterialEditText
+                android:id="@+id/homeAddressEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="地址"
-                app:met_iconLeft="@drawable/ic_account_circle_black_48dp"
+                android:hint="家庭住址"
                 app:met_floatingLabel="highlight"
-                app:met_iconPadding="0dp" />
-
-            <com.rengwuxian.materialedittext.MaterialEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="微信"
-                app:met_iconLeft="@drawable/ic_account_circle_black_48dp"
-                app:met_floatingLabel="highlight"
-                app:met_iconPadding="0dp" />
-
-            <com.rengwuxian.materialedittext.MaterialEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="网站"
-                app:met_iconLeft="@drawable/ic_account_circle_black_48dp"
-                app:met_floatingLabel="highlight"
+                app:met_iconLeft="@drawable/ic_location_on_black_24dp"
                 app:met_iconPadding="0dp" />
         </LinearLayout>
 

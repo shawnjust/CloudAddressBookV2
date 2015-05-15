@@ -11,9 +11,7 @@ import com.shawn.tongji.cloudaddressbook.bean.User;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by shawn on 5/13/15.
- */
+
 public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ContactsViewHolder> {
 
     List<User> list;
@@ -28,7 +26,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     }
 
     public ContactsAdapter() {
-        list = new ArrayList<User>();
+        list = new ArrayList<>();
     }
 
     public ContactsAdapter(List<User> list) {
@@ -66,7 +64,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     }
 
     public interface OnContactsViewHolderClick {
-        public void onContactsViewHolderClick(ContactsViewHolder viewHolder);
+        void onContactsViewHolderClick(ContactsViewHolder viewHolder);
     }
 
     public class ContactsViewHolder extends RecyclerView.ViewHolder {

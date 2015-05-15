@@ -1,43 +1,52 @@
 package com.shawn.tongji.cloudaddressbook;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.google.gson.Gson;
 import com.rengwuxian.materialedittext.MaterialEditText;
+import com.shawn.tongji.cloudaddressbook.bean.User;
 import com.shawn.tongji.cloudaddressbook.bean.UserContactInfo;
+import com.shawn.tongji.cloudaddressbook.client.UserServices;
+import com.shawn.tongji.cloudaddressbook.net.MyCallBack;
 import com.shawn.tongji.cloudaddressbook.net.MySharedPreferences;
 import com.shawn.tongji.cloudaddressbook.net.UrlUtil;
-import com.shawn.tongji.cloudaddressbook.net.VolleySingleton;
 
 import net.tsz.afinal.FinalActivity;
 import net.tsz.afinal.annotation.view.ViewInject;
 
-import java.util.HashMap;
-import java.util.Map;
+import retrofit.client.Response;
 
 
 public class SetAddressListActivity extends ActionBarActivity {
+
+    public static final int IMAGE_RESULT = 100;
+    private static final int IMAGE_CROP = 200;
 
     @ViewInject(id = R.id.appBar)
     Toolbar toolbar;
 
     @ViewInject(id = R.id.nameEditText)
     MaterialEditText nameEditText;
+    @ViewInject(id = R.id.mobilePhoneEditText)
+    MaterialEditText mobilePhoneEditText;
     @ViewInject(id = R.id.homePhoneEditText)
     MaterialEditText homePhoneEditText;
     @ViewInject(id = R.id.emailEditText)
     MaterialEditText emailEditText;
+    @ViewInject(id = R.id.homeAddressEditText)
+    MaterialEditText homeAddressEditText;
 
+    UserContactInfo userContactInfo;
+
+    UserServices userServices = UrlUtil.getRestAdapter().create(UserServices.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +58,22 @@ public class SetAddressListActivity extends ActionBarActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        Intent intent = getIntent();
+        Bundle bundle = intent.getBundleExtra("BUNDLE");
+        User user = (User) bundle.getSerializable("SELF");
+
+        if (user.getUserContactInfoList() == null || user.getUserContactInfoList().size() == 0) {
+            userContactInfo = new UserContactInfo();
+            userContactInfo.setUserId(user.getUserId());
+        } else {
+            userContactInfo = user.getUserContactInfoList().get(0);
+        }
+
+        nameEditText.setText(userContactInfo.getName());
+        homePhoneEditText.setText(userContactInfo.getHomePhone());
+        mobilePhoneEditText.setText(userContactInfo.getMobilePhone());
+        emailEditText.setText(userContactInfo.getEmail());
+        homeAddressEditText.setText(userContactInfo.getHomeAddress());
 
     }
 
@@ -67,46 +92,47 @@ public class SetAddressListActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.actionAdd) {
+        switch (id) {
+            case R.id.action_add:
+                userContactInfo.setName(nameEditText.getText().toString());
+                userContactInfo.setHomePhone(homePhoneEditText.getText().toString());
+                userContactInfo.setMobilePhone(mobilePhoneEditText.getText().toString());
+                userContactInfo.setEmail(emailEditText.getText().toString());
+                userContactInfo.setHomeAddress(homeAddressEditText.getText().toString());
 
-            final UserContactInfo userContactInfo = new UserContactInfo();
-            int userId = MySharedPreferences.getInstance().getUserId();
-            userContactInfo.setUserId(userId);
-            userContactInfo.setName(nameEditText.getText().toString());
-            userContactInfo.setHomePhone(homePhoneEditText.getText().toString());
-            userContactInfo.setEmail(emailEditText.getText().toString());
-
-            StringRequest stringRequest = new StringRequest(Request.Method.POST,
-                    UrlUtil.getSaveUserContactorUrl(),
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            Toast.makeText(SetAddressListActivity.this, "保存成功: " + response, Toast.LENGTH_SHORT).show();
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(SetAddressListActivity.this, "error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-
-                        }
+                userServices.setContacts(MySharedPreferences.getInstance().getUserId(), userContactInfo, new MyCallBack<UserContactInfo>() {
+                    @Override
+                    public void success(UserContactInfo userContactInfo, Response response) {
+//                    SetAddressListActivity.this.finishActivity(Activity.RESULT_OK);
+                        setResult(Activity.RESULT_OK);
+                        SetAddressListActivity.this.finish();
                     }
-            ) {
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    Map<String, String> map = new HashMap<String, String>();
-                    Gson gson = new Gson();
-                    String contactor = gson.toJson(userContactInfo);
-                    map.put("contactor", contactor);
-                    return map;
-                }
-
-            };
-            VolleySingleton.getInstance().getRequestQueue().add(stringRequest);
-
-            return true;
+                });
+                return true;
+            case R.id.action_set_image:
+                Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, IMAGE_RESULT);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
+    }
 
-        return super.onOptionsItemSelected(item);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case IMAGE_RESULT:
+                if ((resultCode == Activity.RESULT_OK) && (data != null)) {
+                    Uri selectedImage = data.getData();
+                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                    Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+                    cursor.moveToFirst();
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    String picturePath = cursor.getString(columnIndex);
+                    cursor.close();
+                }
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

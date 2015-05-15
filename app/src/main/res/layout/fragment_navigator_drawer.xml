@@ -44,20 +44,21 @@
         android:layout_height="48dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:id="@+id/messageLayout">
 
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_lock_black_24dp" />
+            android:src="@drawable/ic_textsms_black_24dp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="32dp"
-            android:text="个人设置" />
+            android:text="@string/message" />
     </LinearLayout>
 
     <LinearLayout

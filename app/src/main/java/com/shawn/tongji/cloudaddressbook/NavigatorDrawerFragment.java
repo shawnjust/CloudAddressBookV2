@@ -2,8 +2,6 @@ package com.shawn.tongji.cloudaddressbook;
 
 
 import android.app.Fragment;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -19,10 +17,8 @@ import android.widget.LinearLayout;
  */
 public class NavigatorDrawerFragment extends Fragment {
 
-    public static int SELF_SETTING = 4;
-
-    public static String PREF_FILE_NAME = "navigatorFile";
-    public static String KEY_USER_LEARNED_DRAWER;
+    public static final int MESSAGE = 2;
+    public static final int SELF_SETTING = 4;
 
     private OnItemClickListener onItemClickListener = null;
 
@@ -30,10 +26,9 @@ public class NavigatorDrawerFragment extends Fragment {
     DrawerLayout drawerLayout;
     View containerView;
 
-    LinearLayout selfSettingLinearLayout;
+    LinearLayout selfSettingLayout;
+    LinearLayout messageLayout;
 
-    boolean mUserLearnedDrawer;
-    boolean mFromSavedInstanceState;
 
     public NavigatorDrawerFragment() {
         // Required empty public constructor
@@ -42,11 +37,6 @@ public class NavigatorDrawerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUserLearnedDrawer = Boolean.valueOf(readFromPreferences(getActivity(), KEY_USER_LEARNED_DRAWER, "false"));
-
-        if (savedInstanceState != null) {
-            mFromSavedInstanceState = true;
-        }
     }
 
     @Override
@@ -54,17 +44,28 @@ public class NavigatorDrawerFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_navigator_drawer, container, false);
-        selfSettingLinearLayout = (LinearLayout) view.findViewById(R.id.selfSettingLayout);
-        selfSettingLinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (onItemClickListener!= null) {
-                    onItemClickListener.onItemClick(SELF_SETTING);
-                }
-            }
-        });
+        selfSettingLayout = (LinearLayout) view.findViewById(R.id.selfSettingLayout);
+        selfSettingLayout.setOnClickListener(clickListener);
+        messageLayout = (LinearLayout) view.findViewById(R.id.messageLayout);
+        messageLayout.setOnClickListener(clickListener);
         return view;
     }
+
+    View.OnClickListener clickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (onItemClickListener != null) {
+                switch (v.getId()) {
+                    case R.id.messageLayout:
+                        onItemClickListener.onItemClick(MESSAGE);
+                        break;
+                    case R.id.selfSettingLayout:
+                        onItemClickListener.onItemClick(SELF_SETTING);
+                        break;
+                }
+            }
+        }
+    };
 
 
     public void setUp(int viewId, DrawerLayout drawerLayout, Toolbar toolbar) {
@@ -75,10 +76,6 @@ public class NavigatorDrawerFragment extends Fragment {
             public void onDrawerOpened(View drawerView) {
 
                 super.onDrawerOpened(drawerView);
-                if (!mUserLearnedDrawer) {
-                    mUserLearnedDrawer = true;
-                    saveToPreferences(getActivity(), KEY_USER_LEARNED_DRAWER, Boolean.toString(mUserLearnedDrawer));
-                }
                 getActivity().invalidateOptionsMenu();
             }
 
@@ -88,9 +85,6 @@ public class NavigatorDrawerFragment extends Fragment {
             }
         };
         this.drawerLayout.setDrawerListener(actionBarDrawerToggle);
-        if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
-            this.drawerLayout.openDrawer(containerView);
-        }
 
         drawerLayout.post(new Runnable() {
             @Override
@@ -99,18 +93,6 @@ public class NavigatorDrawerFragment extends Fragment {
             }
         });
 
-    }
-
-    public static void saveToPreferences(Context context, String preferenceName, String preferenceValue) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_FILE_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(preferenceName, preferenceValue);
-        editor.apply();
-    }
-
-    public static String readFromPreferences(Context context, String preferenceName, String defaultValue) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_FILE_NAME, Context.MODE_PRIVATE);
-        return sharedPreferences.getString(preferenceName, defaultValue);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {

@@ -1,21 +1,27 @@
 package com.shawn.tongji.cloudaddressbook.bean;
 
+import com.shawn.tongji.cloudaddressbook.R;
+import com.shawn.tongji.cloudaddressbook.annotation.Display;
+
 import java.util.Date;
 
-/**
- * Created by shawn on 4/30/15.
- */
-public class UserContactInfo {
+public class UserContactInfo extends ContactsInfoListGetter {
     private Integer userContactInfoId;
     private Integer userId;
+    @Display(fieldKey = "姓名", gravity = 1)
     private String name;
+    @Display(fieldKey = "名", gravity = 2)
     private String firstname;
+    @Display(fieldKey = "姓", gravity = 3)
     private String lastname;
+    @Display(fieldKey = "邮件", gravity = 20, drawableId = R.drawable.ic_mail_black_24dp)
     private String email;
     private String email2;
     private String email3;
     private String email4;
+    @Display(fieldKey = "家庭电话", gravity = 11, drawableId = R.drawable.ic_phone_black_24dp)
     private String homePhone;
+    @Display(fieldKey = "移动电话", gravity = 10, drawableId = R.drawable.ic_phone_black_24dp)
     private String mobilePhone;
     private String phone1;
     private String phone1Name;
@@ -26,6 +32,7 @@ public class UserContactInfo {
     private String phone4;
     private String phone4Name;
     private String address;
+    @Display(fieldKey = "家庭住址", gravity = 30, drawableId = R.drawable.ic_location_on_black_24dp)
     private String homeAddress;
     private String corporationName;
     private String corporationAddress;
@@ -240,4 +247,6 @@ public class UserContactInfo {
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
+
+
 }

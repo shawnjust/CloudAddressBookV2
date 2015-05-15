@@ -103,6 +103,7 @@ public class LoginActivity extends ActionBarActivity {
         services.login(loginNameEditText.getText().toString(), passwordEditText.getText().toString(), new MyCallBack<User>() {
             @Override
             public void success(User user, Response response) {
+                MySharedPreferences.getInstance().setUserId(user.getUserId());
                 Toast.makeText(LoginActivity.this, "YES! " + new Gson().toJson(user), Toast.LENGTH_LONG).show();
             }
 

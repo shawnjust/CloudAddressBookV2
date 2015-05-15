@@ -3,8 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.shawn.tongji.cloudaddressbook.SetAddressListActivity">
     <item
-        android:id="@+id/actionAdd"
+        android:id="@+id/action_add"
         android:title="@string/add"
         android:orderInCategory="100"
-        app:showAsAction="always" />
+        android:icon="@drawable/ic_send_white_24dp"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_set_image"
+        android:title="设置头像"
+        android:icon="@drawable/ic_account_circle_white_24dp"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+
 </menu>

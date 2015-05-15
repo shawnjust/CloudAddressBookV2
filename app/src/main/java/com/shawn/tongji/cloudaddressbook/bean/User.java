@@ -1,24 +1,20 @@
 package com.shawn.tongji.cloudaddressbook.bean;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.shawn.tongji.cloudaddressbook.R;
 import com.shawn.tongji.cloudaddressbook.annotation.Display;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
 
-public class User implements Parcelable {
+public class User extends ContactsInfoListGetter {
 
 
     private Integer userId;
     @Display(fieldKey = "用户名", gravity = 1, drawableId = R.drawable.ic_person_black_24dp)
     private String userName;
     private String userPassword;
-    @Display(fieldKey = "邮件地址", gravity = 100,drawableId = R.drawable.ic_mail_black_24dp)
+    @Display(fieldKey = "邮件地址", gravity = 100, drawableId = R.drawable.ic_mail_black_24dp)
     private String userEmail;
+    private List<UserContactInfo> userContactInfoList;
 
     /**
      * default constructor
@@ -67,57 +63,11 @@ public class User implements Parcelable {
         this.userEmail = userEmail;
     }
 
-    public static final Creator<User> CREATOR = new Creator<User>() {
-        @Override
-        public User createFromParcel(Parcel source) {
-            return new User(source);
-        }
-
-        @Override
-        public User[] newArray(int size) {
-            return new User[size];
-        }
-    };
-
-    private User(Parcel source) {
-        userId = source.readInt();
-        userName = source.readString();
-        userPassword = source.readString();
-        userEmail = source.readString();
+    public List<UserContactInfo> getUserContactInfoList() {
+        return userContactInfoList;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(userId);
-        dest.writeString(userName);
-        dest.writeString(userPassword);
-        dest.writeString(userEmail);
-    }
-
-    public List<ContactsInfoItem> getContactsInfoItem() {
-        List<ContactsInfoItem> list = new ArrayList<ContactsInfoItem>();
-        Field[] fields = getClass().getDeclaredFields();
-        for (Field field : fields) {
-            if (field.isAnnotationPresent(Display.class)) {
-                field.setAccessible(true);
-                Display display = field.getAnnotation(Display.class);
-                ContactsInfoItem contactsInfoItem = new ContactsInfoItem();
-                contactsInfoItem.setKey(display.fieldKey());
-                contactsInfoItem.setGravity(display.gravity());
-                try {
-                    contactsInfoItem.setValue(String.valueOf(field.get(this)));
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-                contactsInfoItem.setIcon(display.drawableId());
-                list.add(contactsInfoItem);
-            }
-        }
-        return list;
+    public void setUserContactInfoList(List<UserContactInfo> userContactInfoList) {
+        this.userContactInfoList = userContactInfoList;
     }
 }

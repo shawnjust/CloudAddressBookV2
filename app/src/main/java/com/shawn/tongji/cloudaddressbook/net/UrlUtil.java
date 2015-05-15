@@ -9,7 +9,7 @@ public class UrlUtil {
     public static final int SERVER_ERROR = 500;
 
     public static final String ROOT_URL = "http://10.20.70.226:8080/CloudAddressBook/services/";
-    public static final String NEW_ROOT_URL = "http://10.20.71.203:8080/AddressBookServices/services/";
+    public static final String NEW_ROOT_URL = "http://192.168.1.111:8080/AddressBookServices/services/";
 
     public static final RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(UrlUtil.NEW_ROOT_URL).build();
 
