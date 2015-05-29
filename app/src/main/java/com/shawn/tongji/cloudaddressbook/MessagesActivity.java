@@ -14,7 +14,7 @@ import com.shawn.tongji.cloudaddressbook.adapter.MessagesAdapter;
 import com.shawn.tongji.cloudaddressbook.bean.User;
 import com.shawn.tongji.cloudaddressbook.client.UserServices;
 import com.shawn.tongji.cloudaddressbook.net.MyCallBack;
-import com.shawn.tongji.cloudaddressbook.net.MySharedPreferences;
+import com.shawn.tongji.cloudaddressbook.util.MySharedPreferences;
 import com.shawn.tongji.cloudaddressbook.net.UrlUtil;
 import com.shawn.tongji.cloudaddressbook.util.DataUtil;
 
@@ -83,7 +83,7 @@ public class MessagesActivity extends ActionBarActivity {
 
             @Override
             public void onRefreshBegin(final PtrFrameLayout ptrFrameLayout) {
-                userServices.getUserList(MySharedPreferences.getInstance().getUserId(), DataUtil.RELATION_APPLY, new MyCallBack<List<User>>() {
+                userServices.getUserList(MySharedPreferences.getInstance().getUser().getUserId(), DataUtil.RELATION_APPLY, new MyCallBack<List<User>>() {
                     @Override
                     public void success(List<User> userList, Response response) {
                         messagesAdapter.setList(userList);

@@ -67,7 +67,7 @@ public class ContactsInfoAdapter extends RecyclerView.Adapter<ContactsInfoAdapte
         } else {
             Drawable drawable = context.getResources().getDrawable(item.getIcon());
             if (drawable != null) {
-                drawable.setColorFilter(context.getResources().getColor(R.color.primaryColor), PorterDuff.Mode.SRC_ATOP);
+                drawable.setColorFilter(context.getResources().getColor(R.color.primaryColorDark), PorterDuff.Mode.SRC_ATOP);
             }
             imageView.setImageDrawable(drawable);
         }

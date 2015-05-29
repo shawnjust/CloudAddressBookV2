@@ -43,6 +43,6 @@
     <string name="error_different_password">两次密码输入不一致</string>
     <string name="error_invalid_name">请输入用户名</string>
     <string name="error_email_has_exist">用户名已经存在</string>
-    <string name="title_activity_image_crop">ImageCropActivity</string>
+    <string name="title_activity_image_crop">设置头像</string>
 
 </resources>

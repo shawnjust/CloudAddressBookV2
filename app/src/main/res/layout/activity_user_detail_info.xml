@@ -3,23 +3,48 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+
     tools:context="com.shawn.tongji.cloudaddressbook.UserDetailInfoActivity">
 
-    <include
-        android:id="@+id/appBar"
-        layout="@layout/app_bar" />
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_padding_top"
+        android:background="@color/primaryColor" />
+
+    <RelativeLayout
+        android:id="@+id/toolBarRelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/view"
+        android:background="@color/primaryColor">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/appBar"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:theme="@style/ActionBarTheme"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/headerImageView"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_account_circle_white_48dp" />
+
+    </RelativeLayout>
 
     <in.srain.cube.views.ptr.PtrClassicFrameLayout
         android:id="@+id/ptrClassicFrameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/appBar">
+        android:layout_below="@id/toolBarRelativeLayout">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/contactsInfoRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-             />
+            android:layout_height="wrap_content" />
     </in.srain.cube.views.ptr.PtrClassicFrameLayout>
 
     <com.gc.materialdesign.views.ButtonRectangle
@@ -31,5 +56,6 @@
         android:background="@color/primaryColor"
         android:text="@string/login_button"
         android:visibility="gone" />
+
 
 </RelativeLayout>

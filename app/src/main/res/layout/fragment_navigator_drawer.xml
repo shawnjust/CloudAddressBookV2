@@ -10,8 +10,31 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="210dp"
-        android:background="#AAA"
-        android:paddingTop="@dimen/toolbar_padding_top">
+        android:background="@drawable/material_design_wallpaper"
+        android:paddingTop="@dimen/toolbar_padding_top"
+        >
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/headerImageView"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:src="@drawable/ic_account_circle_black_48dp"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="名字"
+            android:textColor="@color/textAndIcon"
+            android:layout_marginLeft="16dp"
+            android:layout_marginBottom="16dp"
+            android:textSize="34sp"
+            android:id="@+id/textView3"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true" />
 
     </RelativeLayout>
 
@@ -87,20 +110,21 @@
         android:layout_height="48dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:id="@+id/logoutLayout">
 
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_lock_black_24dp" />
+            android:src="@drawable/ic_settings_power_black_24dp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="32dp"
-            android:text="个人设置" />
+            android:text="退出登录" />
     </LinearLayout>
 
 

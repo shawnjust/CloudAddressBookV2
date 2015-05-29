@@ -15,6 +15,7 @@ import com.shawn.tongji.cloudaddressbook.bean.User;
 import com.shawn.tongji.cloudaddressbook.client.UserServices;
 import com.shawn.tongji.cloudaddressbook.net.MyCallBack;
 import com.shawn.tongji.cloudaddressbook.net.UrlUtil;
+import com.shawn.tongji.cloudaddressbook.util.SecurityUtil;
 
 import net.tsz.afinal.FinalActivity;
 import net.tsz.afinal.annotation.view.ViewInject;
@@ -97,10 +98,11 @@ public class RegistrationActivity extends ActionBarActivity {
             passwordRepeatEditText.setError(getString(R.string.error_different_password));
             return;
         }
+
         User user = new User();
         user.setUserName(nameEditText.getText().toString());
         user.setUserEmail(emailEditText.getText().toString());
-        user.setUserPassword(passwordEditText.getText().toString());
+        user.setUserPassword(SecurityUtil.MD5(passwordEditText.getText().toString()));
         UserServices userServices = UrlUtil.getRestAdapter().create(UserServices.class);
         Toast.makeText(RegistrationActivity.this, new Gson().toJson(user), Toast.LENGTH_SHORT).show();
         userServices.registration(user, new MyCallBack<User>() {

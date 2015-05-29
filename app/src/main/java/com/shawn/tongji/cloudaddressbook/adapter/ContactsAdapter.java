@@ -1,5 +1,6 @@
 package com.shawn.tongji.cloudaddressbook.adapter;
 
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,9 +8,12 @@ import android.widget.TextView;
 
 import com.shawn.tongji.cloudaddressbook.R;
 import com.shawn.tongji.cloudaddressbook.bean.User;
+import com.shawn.tongji.cloudaddressbook.util.MySharedPreferences;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ContactsViewHolder> {
@@ -41,11 +45,21 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
     }
 
     @Override
-    public void onBindViewHolder(ContactsViewHolder holder, int position) {
+    public void onBindViewHolder(final ContactsViewHolder holder, int position) {
         User user = list.get(position);
         holder.getNameTextView().setText(user.getUserName());
         holder.getEmailTextView().setText(user.getUserEmail());
         holder.setUser(user);
+        if (user.getUserHeader() != null && !"".equals(user.getUserHeader())) {
+            MySharedPreferences.getInstance().getUserHeader(user, false, new MySharedPreferences.OnBitMapGetCallback() {
+                @Override
+                public void onGetBitmap(Bitmap bitmap) {
+                    if (bitmap != null) {
+                        holder.getUserHeaderImageView().setImageBitmap(bitmap);
+                    }
+                }
+            });
+        }
     }
 
     @Override
@@ -71,6 +85,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
 
         TextView nameTextView;
         TextView emailTextView;
+        CircleImageView userHeaderImageView;
         User user;
 
         public ContactsViewHolder(View itemView) {
@@ -85,23 +100,18 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
                     }
                 }
             });
+            userHeaderImageView = (CircleImageView) itemView.findViewById(R.id.userHeaderImageView);
         }
 
         public TextView getNameTextView() {
             return nameTextView;
         }
 
-        public void setNameTextView(TextView nameTextView) {
-            this.nameTextView = nameTextView;
-        }
 
         public TextView getEmailTextView() {
             return emailTextView;
         }
 
-        public void setEmailTextView(TextView emailTextView) {
-            this.emailTextView = emailTextView;
-        }
 
         public User getUser() {
             return user;
@@ -110,5 +120,10 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.Contac
         public void setUser(User user) {
             this.user = user;
         }
+
+        public CircleImageView getUserHeaderImageView() {
+            return userHeaderImageView;
+        }
+
     }
 }

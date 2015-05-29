@@ -15,6 +15,7 @@ public class User extends ContactsInfoListGetter {
     @Display(fieldKey = "邮件地址", gravity = 100, drawableId = R.drawable.ic_mail_black_24dp)
     private String userEmail;
     private List<UserContactInfo> userContactInfoList;
+    private String userHeader;
 
     /**
      * default constructor
@@ -69,5 +70,13 @@ public class User extends ContactsInfoListGetter {
 
     public void setUserContactInfoList(List<UserContactInfo> userContactInfoList) {
         this.userContactInfoList = userContactInfoList;
+    }
+
+    public String getUserHeader() {
+        return userHeader;
+    }
+
+    public void setUserHeader(String userHeader) {
+        this.userHeader = userHeader;
     }
 }

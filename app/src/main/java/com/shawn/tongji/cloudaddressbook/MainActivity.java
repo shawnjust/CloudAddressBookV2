@@ -16,7 +16,7 @@ import com.shawn.tongji.cloudaddressbook.adapter.ContactsAdapter;
 import com.shawn.tongji.cloudaddressbook.bean.User;
 import com.shawn.tongji.cloudaddressbook.client.UserServices;
 import com.shawn.tongji.cloudaddressbook.net.MyCallBack;
-import com.shawn.tongji.cloudaddressbook.net.MySharedPreferences;
+import com.shawn.tongji.cloudaddressbook.util.MySharedPreferences;
 import com.shawn.tongji.cloudaddressbook.net.UrlUtil;
 import com.shawn.tongji.cloudaddressbook.util.DataUtil;
 
@@ -33,6 +33,7 @@ import in.srain.cube.views.ptr.PtrHandler;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+import static com.shawn.tongji.cloudaddressbook.NavigatorDrawerFragment.LOGOUT;
 import static com.shawn.tongji.cloudaddressbook.NavigatorDrawerFragment.MESSAGE;
 import static com.shawn.tongji.cloudaddressbook.NavigatorDrawerFragment.SELF_SETTING;
 
@@ -66,6 +67,15 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //if not login
+        if (MySharedPreferences.getInstance().getUser() == null) {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            MainActivity.this.finish();
+            return;
+        }
+
         setContentView(R.layout.activity_main);
 
         FinalActivity.initInjectedView(this);
@@ -86,6 +96,14 @@ public class MainActivity extends ActionBarActivity {
                         break;
                     case MESSAGE:
                         startActivity(new Intent(MainActivity.this, MessagesActivity.class));
+                        break;
+                    case LOGOUT:
+                        MySharedPreferences.getInstance().clearUser();
+                        if (MySharedPreferences.getInstance().getUser() == null) {
+                            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            MainActivity.this.finish();
+                        }
                         break;
                 }
             }
@@ -112,7 +130,7 @@ public class MainActivity extends ActionBarActivity {
 
             @Override
             public void onRefreshBegin(PtrFrameLayout ptrFrameLayout) {
-                userServices.getUserList(MySharedPreferences.getInstance().getUserId(), DataUtil.RELATION_FOLLOW, new MyCallBack<List<User>>() {
+                userServices.getUserList(MySharedPreferences.getInstance().getUser().getUserId(), DataUtil.RELATION_FOLLOW, new MyCallBack<List<User>>() {
                     @Override
                     public void success(List<User> userList, Response response) {
                         adapter.setList(userList);
@@ -130,9 +148,7 @@ public class MainActivity extends ActionBarActivity {
 
         mainRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
 
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            }
-
+            @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 ptrClassicFrameLayout.setEnabled(linearLayoutManager.findFirstCompletelyVisibleItemPosition() == 0);
             }

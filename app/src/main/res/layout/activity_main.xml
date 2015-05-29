@@ -31,13 +31,15 @@
                     android:id="@+id/SuccessButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Success" />
+                    android:text="Success"
+                    android:visibility="gone"/>
 
                 <Button
                     android:id="@+id/SecondButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Second" />
+                    android:text="Second"
+                    android:visibility="gone"/>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/mainPageRecyclerView"

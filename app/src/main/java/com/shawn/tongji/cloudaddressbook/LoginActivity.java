@@ -11,13 +11,13 @@ import android.widget.Toast;
 
 import com.gc.materialdesign.views.ButtonFlat;
 import com.gc.materialdesign.views.ButtonRectangle;
-import com.google.gson.Gson;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.shawn.tongji.cloudaddressbook.bean.User;
 import com.shawn.tongji.cloudaddressbook.client.UserServices;
 import com.shawn.tongji.cloudaddressbook.net.MyCallBack;
-import com.shawn.tongji.cloudaddressbook.net.MySharedPreferences;
+import com.shawn.tongji.cloudaddressbook.util.MySharedPreferences;
 import com.shawn.tongji.cloudaddressbook.net.UrlUtil;
+import com.shawn.tongji.cloudaddressbook.util.SecurityUtil;
 
 import net.tsz.afinal.FinalActivity;
 import net.tsz.afinal.annotation.view.ViewInject;
@@ -56,8 +56,8 @@ public class LoginActivity extends ActionBarActivity {
         FinalActivity.initInjectedView(this);
 
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setHomeButtonEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         loginNameEditText.setText(MySharedPreferences.getInstance().getSharedPreferences().getString(MySharedPreferences.LOGIN_EMAIL, ""));
         passwordEditText.setText(MySharedPreferences.getInstance().getSharedPreferences().getString(MySharedPreferences.PASSWORD, ""));
@@ -98,13 +98,18 @@ public class LoginActivity extends ActionBarActivity {
             passwordEditText.setError(this.getString(R.string.error_invalid_password));
             return;
         }
+        String passwordMD5 = SecurityUtil.MD5(passwordEditText.getText().toString());
 
         UserServices services = UrlUtil.getRestAdapter().create(UserServices.class);
-        services.login(loginNameEditText.getText().toString(), passwordEditText.getText().toString(), new MyCallBack<User>() {
+        services.login(loginNameEditText.getText().toString(), passwordMD5, new MyCallBack<User>() {
             @Override
             public void success(User user, Response response) {
-                MySharedPreferences.getInstance().setUserId(user.getUserId());
-                Toast.makeText(LoginActivity.this, "YES! " + new Gson().toJson(user), Toast.LENGTH_LONG).show();
+                MySharedPreferences.getInstance().setUser(user);
+                Toast.makeText(LoginActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                LoginActivity.this.finish();
+//                Toast.makeText(LoginActivity.this, "YES! " + new Gson().toJson(user), Toast.LENGTH_LONG).show();
             }
 
             @Override

@@ -14,4 +14,11 @@
 
     </style>
 
+    <style name="ActionBarTheme" parent="AppTheme.Base">
+        <item name="android:textColor">@color/textAndIcon</item>
+        <item name="android:textColorPrimary">@color/textAndIcon</item>
+        <item name="android:textColorSecondary">@color/textAndIcon</item>
+        <item name="android:background">@color/primaryColor</item>
+    </style>
+
 </resources>

@@ -44,8 +44,8 @@ public interface UserServices {
                          Callback<UserRelation> callback);
 
     @POST("/users/contacts/{id}")
-    public void setContacts(@Path("id") int id,
-                            @Body UserContactInfo contacts,
-                            Callback<UserContactInfo> callback);
+    void setContacts(@Path("id") int id,
+                     @Body UserContactInfo contacts,
+                     Callback<UserContactInfo> callback);
 }
 

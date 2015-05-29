@@ -2,6 +2,7 @@ package com.shawn.tongji.cloudaddressbook;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,7 +22,7 @@ import com.shawn.tongji.cloudaddressbook.bean.User;
 import com.shawn.tongji.cloudaddressbook.bean.UserRelation;
 import com.shawn.tongji.cloudaddressbook.client.UserServices;
 import com.shawn.tongji.cloudaddressbook.net.MyCallBack;
-import com.shawn.tongji.cloudaddressbook.net.MySharedPreferences;
+import com.shawn.tongji.cloudaddressbook.util.MySharedPreferences;
 import com.shawn.tongji.cloudaddressbook.net.UrlUtil;
 import com.shawn.tongji.cloudaddressbook.util.DataUtil;
 
@@ -30,6 +31,7 @@ import net.tsz.afinal.annotation.view.ViewInject;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import in.srain.cube.views.ptr.PtrClassicFrameLayout;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
@@ -54,6 +56,9 @@ public class UserDetailInfoActivity extends ActionBarActivity {
     @ViewInject(id = R.id.ptrClassicFrameLayout)
     PtrClassicFrameLayout ptrClassicFrameLayout;
 
+    @ViewInject(id = R.id.headerImageView)
+    CircleImageView headerImageView;
+
     UserServices userServices = UrlUtil.getRestAdapter().create(UserServices.class);
     User user;
     ContactsInfoAdapter adapter;
@@ -71,9 +76,10 @@ public class UserDetailInfoActivity extends ActionBarActivity {
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("BUNDLE");
         user = (User) bundle.getSerializable("USER");
-        getSupportActionBar().setTitle(user.getUserName());
+        getSupportActionBar().setTitle(null);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         contactsInfoRecyclerView.setLayoutManager(linearLayoutManager);
 
         List<ContactsInfoItem> itemList = user.getContactsInfoItem();
@@ -89,7 +95,7 @@ public class UserDetailInfoActivity extends ActionBarActivity {
 
             @Override
             public void onRefreshBegin(final PtrFrameLayout ptrFrameLayout) {
-                userServices.getUserRelation(MySharedPreferences.getInstance().getUserId(), user.getUserId(), new MyCallBack<UserRelation>() {
+                userServices.getUserRelation(MySharedPreferences.getInstance().getUser().getUserId(), user.getUserId(), new MyCallBack<UserRelation>() {
 
                     @Override
                     public void success(UserRelation userRelation, Response response) {
@@ -104,6 +110,15 @@ public class UserDetailInfoActivity extends ActionBarActivity {
                         super.failure(error);
                     }
                 });
+
+            }
+        });
+
+        contactsInfoRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                ptrClassicFrameLayout.setEnabled(linearLayoutManager.findFirstCompletelyVisibleItemPosition() == 0);
             }
         });
 
@@ -118,7 +133,7 @@ public class UserDetailInfoActivity extends ActionBarActivity {
 
         @Override
         public void onClick(View v) {
-            userServices.changeRelation(MySharedPreferences.getInstance().getUserId(), user.getUserId(), DataUtil.RELATION_APPLY, new MyCallBack<UserRelation>() {
+            userServices.changeRelation(MySharedPreferences.getInstance().getUser().getUserId(), user.getUserId(), DataUtil.RELATION_APPLY, new MyCallBack<UserRelation>() {
 
                 @Override
                 public void success(UserRelation userRelation, Response response) {
@@ -131,6 +146,15 @@ public class UserDetailInfoActivity extends ActionBarActivity {
     }
 
     private void setByRelation(UserRelation userRelation) {
+        user = userRelation.getUserTo();
+        MySharedPreferences.getInstance().getUserHeader(user, true, new MySharedPreferences.OnBitMapGetCallback() {
+            @Override
+            public void onGetBitmap(Bitmap bitmap) {
+                if (bitmap != null) {
+                    headerImageView.setImageBitmap(bitmap);
+                }
+            }
+        });
         switch (userRelation.getRelationType()) {
             case DataUtil.RELATION_APPLY:
             case DataUtil.RELATION_STRANGER:
@@ -147,7 +171,6 @@ public class UserDetailInfoActivity extends ActionBarActivity {
                     infoList = userRelation.getUserTo().getUserContactInfoList().get(0).getContactsInfoItem();
                 }
                 adapter.setList(infoList);
-
                 break;
         }
     }
@@ -155,11 +178,10 @@ public class UserDetailInfoActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        if (user.getUserId() == MySharedPreferences.getInstance().getUserId()) {
+        if (user.getUserId().equals(MySharedPreferences.getInstance().getUser().getUserId())) {
             getMenuInflater().inflate(R.menu.menu_user_detail_info, menu);
-            return true;
         }
-        return false;
+        return true;
     }
 
     @Override
@@ -170,13 +192,15 @@ public class UserDetailInfoActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_self_info_settings) {
-            Intent intent = new Intent(UserDetailInfoActivity.this, SetAddressListActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("SELF", user);
-            intent.putExtra("BUNDLE", bundle);
-            startActivityForResult(intent, 0);
-            return true;
+        switch (id) {
+            case R.id.action_self_info_settings:
+                Intent intent = new Intent(UserDetailInfoActivity.this, SetAddressListActivity.class);
+                MySharedPreferences.getInstance().setUser(user);
+                startActivityForResult(intent, 0);
+                return true;
+            case android.R.id.home:
+                UserDetailInfoActivity.this.finish();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

@@ -19,6 +19,7 @@ public class NavigatorDrawerFragment extends Fragment {
 
     public static final int MESSAGE = 2;
     public static final int SELF_SETTING = 4;
+    public static final int LOGOUT = 5;
 
     private OnItemClickListener onItemClickListener = null;
 
@@ -28,6 +29,7 @@ public class NavigatorDrawerFragment extends Fragment {
 
     LinearLayout selfSettingLayout;
     LinearLayout messageLayout;
+    LinearLayout logoutLayout;
 
 
     public NavigatorDrawerFragment() {
@@ -48,6 +50,8 @@ public class NavigatorDrawerFragment extends Fragment {
         selfSettingLayout.setOnClickListener(clickListener);
         messageLayout = (LinearLayout) view.findViewById(R.id.messageLayout);
         messageLayout.setOnClickListener(clickListener);
+        logoutLayout = (LinearLayout) view.findViewById(R.id.logoutLayout);
+        logoutLayout.setOnClickListener(clickListener);
         return view;
     }
 
@@ -61,6 +65,9 @@ public class NavigatorDrawerFragment extends Fragment {
                         break;
                     case R.id.selfSettingLayout:
                         onItemClickListener.onItemClick(SELF_SETTING);
+                        break;
+                    case R.id.logoutLayout:
+                        onItemClickListener.onItemClick(LOGOUT);
                         break;
                 }
             }

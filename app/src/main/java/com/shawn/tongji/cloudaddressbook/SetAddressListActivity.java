@@ -16,7 +16,7 @@ import com.shawn.tongji.cloudaddressbook.bean.User;
 import com.shawn.tongji.cloudaddressbook.bean.UserContactInfo;
 import com.shawn.tongji.cloudaddressbook.client.UserServices;
 import com.shawn.tongji.cloudaddressbook.net.MyCallBack;
-import com.shawn.tongji.cloudaddressbook.net.MySharedPreferences;
+import com.shawn.tongji.cloudaddressbook.util.MySharedPreferences;
 import com.shawn.tongji.cloudaddressbook.net.UrlUtil;
 
 import net.tsz.afinal.FinalActivity;
@@ -59,8 +59,7 @@ public class SetAddressListActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
-        Bundle bundle = intent.getBundleExtra("BUNDLE");
-        User user = (User) bundle.getSerializable("SELF");
+        User user = MySharedPreferences.getInstance().getUser();
 
         if (user.getUserContactInfoList() == null || user.getUserContactInfoList().size() == 0) {
             userContactInfo = new UserContactInfo();
@@ -100,7 +99,7 @@ public class SetAddressListActivity extends ActionBarActivity {
                 userContactInfo.setEmail(emailEditText.getText().toString());
                 userContactInfo.setHomeAddress(homeAddressEditText.getText().toString());
 
-                userServices.setContacts(MySharedPreferences.getInstance().getUserId(), userContactInfo, new MyCallBack<UserContactInfo>() {
+                userServices.setContacts(MySharedPreferences.getInstance().getUser().getUserId(), userContactInfo, new MyCallBack<UserContactInfo>() {
                     @Override
                     public void success(UserContactInfo userContactInfo, Response response) {
 //                    SetAddressListActivity.this.finishActivity(Activity.RESULT_OK);
@@ -130,8 +129,16 @@ public class SetAddressListActivity extends ActionBarActivity {
                     int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                     String picturePath = cursor.getString(columnIndex);
                     cursor.close();
+
+                    Intent intent = new Intent(SetAddressListActivity.this, ImageCropActivity.class);
+                    intent.putExtra("PICTURE_PATH", picturePath);
+                    startActivityForResult(intent, IMAGE_CROP);
                 }
                 break;
+            case IMAGE_CROP:
+                if ((resultCode == Activity.RESULT_OK)) {
+
+                }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
